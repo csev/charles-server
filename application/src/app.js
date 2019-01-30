@@ -2,7 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import App from './App.vue';
-import Test from './components/Test.vue';
+import FooView from './views/FooView.vue';
+import BarView from './views/BarView.vue';
 
 import '../assets/app.sass';
 
@@ -12,7 +13,8 @@ async function main() {
   Vue.use(VueRouter);
 
   const routes = [
-    { path: '/foo', component: Test }
+    { path: '/foo', component: FooView },
+    { path: '/bar', component: BarView }
   ];
 
   const router = new VueRouter({
