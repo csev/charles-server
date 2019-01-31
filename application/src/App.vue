@@ -1,8 +1,6 @@
 <template>
   <div>
     <navigation />
-    
-    <h1>Sugarush</h1>
 
     <router-view></router-view>
   </div>

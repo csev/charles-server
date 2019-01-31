@@ -1,5 +1,6 @@
 <template>
   <div class='ui centered grid'>
+    <h2>Log In</h2>
     <div class='row'>
       <div v-if='errors.length' class='ui negative message'>
         <div class='header'>Login Failure</div>
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div class='row'>
-      <div v-on:click='login' class='ui submit button'>Submit</div>
+      <div v-on:click='login' class='ui violet submit button'>Submit</div>
     </div>
   </div>
 </template>
@@ -45,7 +46,6 @@
     },
     methods: {
       login: async function() {
-        console.log(this);
         WebToken.attributes = {
           username: this.username,
           password: this.password
@@ -57,7 +57,7 @@
           this.errors = WebToken.data.errors;
         } else {
           this.errors = [ ];
-          this.$router.push('user');
+          this.$router.push('profile');
         }
       }
     }

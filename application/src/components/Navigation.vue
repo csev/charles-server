@@ -1,6 +1,7 @@
 <template>
   <p>
-    <router-link to='/user'>User</router-link>
+    <router-link to='/about'>About</router-link>
+    <router-link v-if='token.length' class='right' to='/profile'>Profile</router-link>
     <router-link v-if='token.length' class='right' to='/logout'>Logout</router-link>
     <router-link v-else class='right' to='/login'>Login</router-link>
   </p>

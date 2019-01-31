@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='ui centered grid'>
     <span>{{ username }}</span>
   </div>
 </template>
@@ -11,14 +11,13 @@
     data: function() {
       if(WebToken.data.token.length) {
         let token = jwt_decode(WebToken.data.token);
+        console.log(token);
+        return token.data.attributes;
+      } else {
         return {
-          username: token.data.attributes.username
-        }
+          username: ''
+        };
       }
-
-      return {
-        username: ''
-      };
     }
   };
 </script>

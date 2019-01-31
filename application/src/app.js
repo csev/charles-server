@@ -7,7 +7,8 @@ import App from './App.vue';
 
 import Login from './views/Login.vue';
 import Logout from './views/Logout.vue';
-import User from './views/User.vue';
+import Profile from './views/Profile.vue';
+import About from './views/About.vue';
 
 
 async function main() {
@@ -15,9 +16,10 @@ async function main() {
   Vue.use(VueRouter);
 
   const routes = [
+    { path: '/about', name: 'about', component: About },
     { path: '/login', name: 'login', component: Login },
     { path: '/logout', name: 'logout', component: Logout },
-    { path: '/user', name: 'user', component: User }
+    { path: '/profile', name: 'profile', component: Profile }
   ];
 
   const router = new VueRouter({
