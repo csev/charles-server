@@ -1,8 +1,11 @@
 <template>
   <div class='ui centered grid'>
-    <h2>Log In</h2>
-    <div class='row'>
-      <div v-if='errors.length' class='ui negative message'>
+    <div>
+      <h2>Log In</h2>
+      <p>Continue below to log in.</p>
+    </div>
+    <div v-if='errors.length' class='row'>
+      <div class='ui negative message'>
         <div class='header'>Login Failure</div>
         <p>{{ errors.length ? errors[0].detail : '' }}</p>
       </div>
