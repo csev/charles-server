@@ -1,12 +1,13 @@
+import '../assets/app.sass';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import App from './App.vue';
 
-import FooView from './views/FooView.vue';
-import BarView from './views/BarView.vue';
-
-import '../assets/app.sass';
+import Login from './views/Login.vue';
+import Logout from './views/Logout.vue';
+import User from './views/User.vue';
 
 
 async function main() {
@@ -14,8 +15,9 @@ async function main() {
   Vue.use(VueRouter);
 
   const routes = [
-    { path: '/foo', component: FooView },
-    { path: '/bar', component: BarView }
+    { path: '/login', name: 'login', component: Login },
+    { path: '/logout', name: 'logout', component: Logout },
+    { path: '/user', name: 'user', component: User }
   ];
 
   const router = new VueRouter({

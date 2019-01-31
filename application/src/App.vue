@@ -1,25 +1,21 @@
 <template>
   <div>
-    <h1>Hello App!</h1>
-    <p>
-      <!-- use router-link component for navigation. -->
-      <!-- specify the link by passing the `to` prop. -->
-      <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
-      <router-link to="/foo">Go to Foo</router-link>
-      <router-link to="/bar">Go to Bar</router-link>
-    </p>
-    <!-- route outlet -->
-    <!-- component matched by the route will render here -->
+    <navigation />
+    
+    <h1>Sugarush</h1>
+
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloComponent from './components/HelloComponent.vue'
+import Navigation from './components/Navigation.vue';
+
+import WebToken from '../bower_components/sugar-data/lib/webtoken.js';
 
 export default {
   components: {
-    HelloComponent
+    Navigation
   }
 }
 </script>
