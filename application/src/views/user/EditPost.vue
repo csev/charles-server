@@ -58,17 +58,40 @@
         return null;
       }
 
-      console.log(this.title);
-
       this.title = post.attributes.title;
       this.content = post.attributes.content;
-
-      console.log(this.title);
     },
     methods: {
-      submit: function() {
+      submit: async function() {
         if(!WebToken.authentication.token) {
           this.errors = [ { detail: 'Not logged in.' } ];
+          return null;
+        }
+
+        let post = new Model({
+          host: 'http://localhost:8080',
+          uri: 'v1',
+          type: 'posts',
+          attributes: {
+            _id: this.$route.params.postId
+          }
+        });
+
+        await post.load();
+
+        if(post.attributes.errors.length) {
+          this.errors = post.attributes.errors;
+          return null;
+        }
+
+        post.attributes.title = this.title;
+        post.attributes.content = this.content;
+        post.attributes.updated = Date.now();
+
+        await post.save();
+
+        if(post.attributes.errors.length) {
+          this.errors = post.attributes.errors;
           return null;
         }
       }
