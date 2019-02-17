@@ -1,8 +1,9 @@
 <template>
   <p>
     <router-link to='/about'>About</router-link>
-    <router-link v-if='token.length' class='right' to='/profile'>Profile</router-link>
-    <router-link v-if='token.length' class='right' to='/logout'>Logout</router-link>
+    <router-link to='/blog'>Blog</router-link>
+    <router-link v-if='token' class='right' :to='{ path: `/user/${payload.data.id}/profile` }'>Profile</router-link>
+    <router-link v-if='token' class='right' to='/logout'>Logout</router-link>
     <router-link v-else class='right' to='/login'>Login</router-link>
   </p>
 </template>
@@ -12,7 +13,7 @@
 
   export default {
     data: function() {
-      return WebToken.data;
+      return WebToken.authentication;
     }
   };
 </script>

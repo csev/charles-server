@@ -25,11 +25,11 @@
                v-model='password'
                type='password'
                placeholder='Password'>
-        <i class='shield icon'></i>
+        <i class='lock icon'></i>
       </div>
     </div>
     <div class='row'>
-      <div v-on:click='login' class='ui violet submit button'>Submit</div>
+      <div v-on:click='login' class='ui violet button'>Submit</div>
     </div>
   </div>
 </template>
@@ -56,11 +56,11 @@
 
         await WebToken.authenticate();
 
-        if(WebToken.data.errors.length) {
-          this.errors = WebToken.data.errors;
+        if(WebToken.authentication.errors.length) {
+          this.errors = WebToken.authentication.errors;
         } else {
           this.errors = [ ];
-          this.$router.push('profile');
+          this.$router.push(`/user/${WebToken.authentication.payload.data.id}/profile`);
         }
       }
     }
