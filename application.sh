@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
 local pids=( )
 
+if [ -z $(command -v mongod) ]; then
+  echo "Missing mongod."
+  return 1
+fi
+
 if [ -z $(command -v bower) ]; then
   echo "Missing bower."
   return 1
@@ -10,6 +15,15 @@ if [ -z $(command -v python) ]; then
   echo "Missing python."
   return 1
 fi
+
+MONGODB_DATA="mongodb_data"
+
+if [ ! -d "${MONGODB_DATA}" ]; then
+  mkdir -p "${MONGODB_DATA}"
+fi
+
+mongod --dbpath "${MONGODB_DATA}" &
+pids+=("$!")
 
 python server &
 pids+=("$!")
