@@ -24,7 +24,7 @@ class Authentication(WebToken):
         group = await Group.find_by_id(user.group)
 
         if not group:
-            raise Exception('User type not found.')
+            raise Exception('User\'s group not found.')
 
         return {
             'data': {

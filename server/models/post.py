@@ -5,6 +5,7 @@ from sugar_api import JSONAPIMixin
 class Post(MongoDBModel, JSONAPIMixin):
 
     __acl__ = {
+        '$owner': ['all'],
         'administrator': ['all'],
         'other': ['read', 'read_all'],
         'unauthorized': ['read', 'read_all']
@@ -16,6 +17,7 @@ class Post(MongoDBModel, JSONAPIMixin):
 
     title = Field(required=True)
     owner = Field(required=True)
-    created = Field(required=True)
-    updated = Field()
+    created = Field(type=int, required=True)
+    updated = Field(type=int)
+    tags = Field(type=[ str ])
     content = Field(required=True)
