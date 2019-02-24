@@ -11,10 +11,10 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     __database_options__ = {
-        'name': 'sugar-blog'
+        'name': 'database-name'
     }
 
     username = Field(required=True)
     password = Field(required=True)
 
-    group = Field(required=True)
+    groups = Field(type=list, required=True)

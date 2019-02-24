@@ -9,7 +9,7 @@ class Group(MongoDBModel, JSONAPIMixin):
     }
 
     __database_options__ = {
-        'name': 'sugar-blog'
+        'name': 'database-name'
     }
 
     name = Field(required=True)

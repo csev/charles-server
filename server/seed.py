@@ -17,11 +17,11 @@ async def before_server_start(app, loop):
             'name': 'administrator'
         })
 
-    user = await User.find_one({ 'group': administrator.id })
+    user = await User.find_one({ 'groups': { '$all': [ administrator.id ] } })
 
     if not user:
         user = await User.add({
             'username': 'admin',
             'password': 'admin',
-            'group': administrator.id
+            'groups': [ administrator.id ]
         })

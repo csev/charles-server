@@ -34,6 +34,10 @@ if [ ! -d "${PWD}/bower_components" ]; then
   bower install
 fi
 
+if [ ! -d "${PWD}/node_modules" ]; then
+  npm install
+fi
+
 npm run server
 pids+=("$!")
 

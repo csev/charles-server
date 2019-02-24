@@ -21,15 +21,17 @@ class Authentication(WebToken):
         if not user:
             raise Exception('Invalid username or password.')
 
-        group = await Group.find_by_id(user.group)
-
-        if not group:
-            raise Exception('User\'s group not found.')
+        groups = [ ]
+        for id in user.groups:
+            group = await Group.find_by_id(id)
+            if not group:
+                raise Exception(f'Group {id} not found.')
+            groups.append(group.name)
 
         return {
             'data': {
                 'id': user.id,
-                'type': group.name,
+                'groups': groups,
                 'attributes': {
                     'username': user.username,
                     'timestamp': datetime.utcnow().timestamp()

@@ -1,5 +1,5 @@
 {
-  "name": "test-vue-webpack",
+  "name": "vue-sugar-api-template",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "copy-webpack-plugin": "^5.0.0",
     "vue": "^2.5.22",
     "vue-router": "^3.0.2"
   },
