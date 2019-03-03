@@ -8,8 +8,6 @@ from models.group import Group
 
 @server.listener('before_server_start')
 async def before_server_start(app, loop):
-    MongoDB.set_event_loop(loop)
-
     administrator = await Group.find_one({ 'name': 'administrator' })
 
     if not administrator:
