@@ -1,3 +1,4 @@
+import handlers
 import resource
 import seed
 
