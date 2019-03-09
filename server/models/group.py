@@ -8,7 +8,7 @@ class Group(MongoDBModel, JSONAPIMixin):
         'administrator': ['all']
     }
 
-    __database_options__ = {
+    __database__ = {
         'name': 'database-name'
     }
 

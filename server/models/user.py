@@ -10,7 +10,7 @@ class User(MongoDBModel, JSONAPIMixin):
         'other': ['read']
     }
 
-    __database_options__ = {
+    __database__ = {
         'name': 'database-name'
     }
 
