@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime
 
 from sugar_api import WebToken
@@ -13,9 +14,11 @@ class Authentication(WebToken):
 
     @classmethod
     async def payload(cls, username, password):
+        digest = hashlib.sha256(password).hexdigest()
+
         user = await User.find_one({
             'username': username,
-            'password': password
+            'password': digest
         })
 
         if not user:
