@@ -14,7 +14,7 @@ class Authentication(WebToken):
 
     @classmethod
     async def payload(cls, username, password):
-        digest = hashlib.sha256(password).hexdigest()
+        digest = hashlib.sha256(password.encode()).hexdigest()
 
         user = await User.find_one({
             'username': username,
