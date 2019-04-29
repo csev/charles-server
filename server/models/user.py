@@ -7,7 +7,7 @@ from sugar_api import JSONAPIMixin
 class User(MongoDBModel, JSONAPIMixin):
 
     __acl__ = {
-        'self': ['read', 'update'],
+        'self': ['read'],
         'administrator': ['all'],
         'other': ['read']
     }
@@ -22,4 +22,4 @@ class User(MongoDBModel, JSONAPIMixin):
     groups = Field(type=list, required=True)
 
     def set_password(self, password):
-        self.password = hashlib.sha256(password).hexdigest()
+        self.password = hashlib.sha256(password.encode()).hexdigest()
