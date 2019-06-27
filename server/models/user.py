@@ -6,6 +6,8 @@ from sugar_api import JSONAPIMixin
 
 class User(MongoDBModel, JSONAPIMixin):
 
+    __rate__ = [ 1, 'secondly' ]
+
     __acl__ = {
         'self': ['read'],
         'administrator': ['all'],
@@ -17,9 +19,15 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     username = Field(required=True)
-    password = Field(required=True)
+    password = Field(required=True, computed='encrypt_password')
 
     groups = Field(type=list, required=True)
 
-    def set_password(self, password):
-        self.password = hashlib.sha256(password.encode()).hexdigest()
+    def encrypt_password(self):
+        if self.password == 'hashed-':
+            raise Exception('Invalid password.')
+
+        if self.password.startswith('hashed-'):
+            return self.password
+
+        return f'hashed-{hashlib.sha256(self.password.encode()).hexdigest()}'

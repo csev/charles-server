@@ -14,7 +14,7 @@ class Authentication(WebToken):
 
     @classmethod
     async def payload(cls, username, password):
-        digest = hashlib.sha256(password.encode()).hexdigest()
+        digest = f'hashed-{hashlib.sha256(password.encode()).hexdigest()}'
 
         user = await User.find_one({
             'username': username,
@@ -35,6 +35,10 @@ class Authentication(WebToken):
             'data': {
                 'id': user.id,
                 'groups': groups,
+                'scope': {
+                    'update-username': user.id,
+                    'update-password': user.id
+                },
                 'attributes': {
                     'username': user.username,
                     'timestamp': datetime.utcnow().timestamp()
