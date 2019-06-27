@@ -13,7 +13,17 @@ WebToken.set_secret('secret')
 class Authentication(WebToken):
 
     @classmethod
-    async def payload(cls, username, password):
+    async def payload(cls, attributes):
+        username = attributes.get('username')
+
+        if not username:
+            raise Exception('No username provided.')
+
+        password = attributes.get('password')
+
+        if not password:
+            raise Exception('No password provided.')
+
         digest = f'hashed-{hashlib.sha256(password.encode()).hexdigest()}'
 
         user = await User.find_one({
