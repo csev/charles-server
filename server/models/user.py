@@ -23,6 +23,10 @@ class User(MongoDBModel, JSONAPIMixin):
 
     groups = Field(type=list, required=True)
 
+    def on_render(self, data):
+        del data['attributes']['password']
+        return data
+
     def encrypt_password(self):
         if self.password == 'hashed-':
             raise Exception('Invalid password.')
