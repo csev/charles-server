@@ -6,7 +6,7 @@ from sugar_api import JSONAPIMixin
 
 class User(MongoDBModel, JSONAPIMixin):
 
-    __rate__ = [ 1, 'secondly' ]
+    __rate__ = ( 1, 'secondly' )
 
     __acl__ = {
         'self': ['read'],
