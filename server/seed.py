@@ -8,18 +8,11 @@ from models.group import Group
 
 @server.listener('before_server_start')
 async def before_server_start(app, loop):
-    administrator = await Group.find_one({ 'name': 'administrator' })
-
-    if not administrator:
-        administrator = await Group.add({
-            'name': 'administrator'
-        })
-
-    user = await User.find_one({ 'groups': { '$all': [ administrator.id ] } })
+    user = await User.find_one({ 'username': 'admin' })
 
     if not user:
         await User.add({
             'username': 'admin',
             'password': 'admin',
-            'groups': [ administrator.id ]
+            'groups': [ 'administrator' ]
         })

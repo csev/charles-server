@@ -1,11 +1,15 @@
 import '../assets/app.sass';
 
+import WebToken from '../bower_components/sugar-data/lib/webtoken.js';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import App from './App.vue';
 
 import Welcome from './views/Welcome.vue';
+
+import { HOST } from './settings.js';
 
 async function main() {
 
@@ -38,6 +42,23 @@ async function main() {
     render: h => h(App)
   }).$mount('#app');
 
+  function forceUpdateAll(element) {
+    for(let child of element.$children) {
+      forceUpdateAll(child);
+    }
+    element.$forceUpdate();
+  }
+
+  function seconds(seconds) {
+    return seconds * 1000;
+  }
+
+  setInterval(async function() {
+    if(WebToken.loggedIn) {
+      await WebToken.refresh(`${HOST}/v1/authentication`);
+      forceUpdateAll(app);
+    }
+  }, seconds(240));
 }
 
 main();

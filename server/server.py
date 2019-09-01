@@ -15,4 +15,5 @@ async def before_server_start(app, loop):
 
 @server.listener('before_server_stop')
 async def before_server_stop(app, loop):
+    MongoDB.close()
     await Redis.close()

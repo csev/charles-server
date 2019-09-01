@@ -1,10 +1,9 @@
 import hashlib
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sugar_api import WebToken
 
 from models.user import User
-from models.group import Group
 
 
 WebToken.set_secret('secret')
@@ -13,7 +12,7 @@ WebToken.set_secret('secret')
 class Authentication(WebToken):
 
     @classmethod
-    async def payload(cls, attributes):
+    async def create(cls, attributes):
         username = attributes.get('username')
 
         if not username:
@@ -34,24 +33,43 @@ class Authentication(WebToken):
         if not user:
             raise Exception('Invalid username or password.')
 
-        groups = [ ]
-        for id in user.groups:
-            group = await Group.find_by_id(id)
-            if not group:
-                raise Exception(f'Group {id} not found.')
-            groups.append(group.name)
-
         return {
+            'exp': datetime.utcnow() + timedelta(minutes=5),
+            'nbf': datetime.utcnow(),
+            'iat': datetime.utcnow(),
             'data': {
                 'id': user.id,
-                'groups': groups,
+                'groups': user.groups,
                 'scope': {
                     'update-username': user.id,
                     'update-password': user.id
                 },
                 'attributes': {
-                    'username': user.username,
-                    'timestamp': datetime.utcnow().timestamp()
+                    'username': user.username
                 }
+            }
+        }
+
+    @classmethod
+    async def refresh(cls, token):
+
+        token_data = token.get('data')
+        token_id = token_data.get('id')
+        token_groups = token_data.get('groups')
+        token_scope = token_data.get('scope')
+        token_attributes = token_data.get('attributes')
+
+        if not await User.exists(token_id):
+            raise Exception('User not found for token ID.')
+
+        return {
+            'exp': datetime.utcnow() + timedelta(minutes=5),
+            'nbf': datetime.utcnow(),
+            'iat': datetime.utcnow(),
+            'data': {
+                'id': token_id,
+                'groups': token_groups,
+                'scope': token_scope,
+                'attributes': token_attributes
             }
         }

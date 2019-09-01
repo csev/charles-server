@@ -25,6 +25,9 @@ fi
 mongod --dbpath "${MONGODB_DATA}" &
 pids+=("$!")
 
+redis-server &
+pids+=("$!")
+
 python server &
 pids+=("$!")
 
