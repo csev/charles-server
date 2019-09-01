@@ -1,6 +1,6 @@
 from sanic import Sanic
 from sugar_api import CORS
-from sugar_odm import MongoDB
+from sugar_odm import MongoDB, Redis
 
 
 CORS.set_origins('*')
