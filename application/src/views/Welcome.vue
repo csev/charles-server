@@ -7,6 +7,8 @@
 </template>
 
 <style lang='sass' scoped>
+  @import "../../assets/color.sass"
+
   h1
-    color: red
+    color: $purple
 </style>

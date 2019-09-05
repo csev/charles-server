@@ -6,16 +6,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  port: 8000,
   mode: 'development',
   entry: [
     './src/app.js'
   ],
   devServer: {
+    port: 8000,
     hot: true,
     watchOptions: {
       poll: true
-    }
+    },
   },
   module: {
     rules: [
