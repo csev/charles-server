@@ -31,7 +31,7 @@ async function main() {
   }
 
   setInterval(async function() {
-    if(WebToken.loggedIn) {
+    if(WebToken.authenticated) {
       await WebToken.refresh(`${HOST}/v1/authentication`);
       forceUpdateAll(app);
     }
