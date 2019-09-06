@@ -3,6 +3,7 @@ git+https://github.com/sugarush/sugar-asynctest@master#egg=sugar-asynctest
 git+https://github.com/sugarush/sugar-odm@master#egg=sugar-odm
 git+https://github.com/sugarush/sugar-api@master#egg=sugar-api
 
+ipython
 pyjwt
 sanic
 aioredis
