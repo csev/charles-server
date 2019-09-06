@@ -26,7 +26,7 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     __database__ = {
-        'name': 'pegasus'
+        'name': 'vue-sugar-template'
     }
 
     username = Field(required=True)
