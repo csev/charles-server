@@ -1,15 +1,15 @@
-import '../assets/app.sass';
+import "../assets/app.sass";
 
-import Vue from 'vue';
+import Vue from "vue";
 
-import WebToken from '../bower_components/sugar-data/lib/webtoken.js';
+import WebToken from "../bower_components/sugar-data/lib/webtoken.js";
 
-import { HOST } from './settings.js';
+import { HOST } from "./settings.js";
 import { router } from "./router/router.js";
 import { store } from "./store/store.js";
 import "./filters/filters.js";
 
-import App from './App.vue';
+import App from "./App.vue";
 
 async function main() {
 
@@ -17,7 +17,7 @@ async function main() {
     router,
     store,
     render: h => h(App)
-  }).$mount('#app');
+  }).$mount("#app");
 
   function forceUpdateAll(element) {
     for(let child of element.$children) {
