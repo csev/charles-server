@@ -26,7 +26,7 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     __database__ = {
-        'name': 'fire-vue'
+        'name': 'fire-server'
     }
 
     username = Field(required=True)
