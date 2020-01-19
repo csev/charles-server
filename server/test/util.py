@@ -1,6 +1,6 @@
 import json
 
-from sugar_document import Document
+from fire_document import Document
 
 
 class Request(object):

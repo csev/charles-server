@@ -1,5 +1,5 @@
-from sugar_api import webtoken, scope, validate, accept, content_type, objectid
-from sugar_api import preflight, jsonapi, Error
+from fire_api import webtoken, scope, validate, accept, content_type, objectid
+from fire_api import preflight, jsonapi, Error
 
 from server import server
 from models.user import User

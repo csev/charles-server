@@ -1,7 +1,7 @@
 import hashlib
 
-from sugar_odm import MongoDBModel, Field
-from sugar_api import JSONAPIMixin
+from fire_odm import MongoDBModel, Field
+from fire_api import JSONAPIMixin
 
 
 class User(MongoDBModel, JSONAPIMixin):
@@ -11,7 +11,7 @@ class User(MongoDBModel, JSONAPIMixin):
     __acl__ = {
         'self': ['read', 'update', 'delete'],
         'administrator': ['all'],
-        #'other': ['read'],
+        'other': ['read'],
         'unauthorized': ['create']
     }
 
@@ -26,7 +26,7 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     __database__ = {
-        'name': 'vue-sugar-template'
+        'name': 'fire-vue'
     }
 
     username = Field(required=True)
@@ -36,6 +36,14 @@ class User(MongoDBModel, JSONAPIMixin):
 
     def on_render(self, data, token):
         del data['attributes']['password']
+
+    async def on_create(self, token):
+        if await self.find_one({ 'username': self.username }):
+            raise Exception(f'Username {self.username} already exists.')
+
+    async def on_update(self, token, attributes):
+        if await self.find_one({ 'username': attributes['username'] }):
+            raise Exception(f'Username {attributes["username"]} already exists.')
 
     def default_groups(self):
         return [ 'users' ]

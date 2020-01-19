@@ -1,7 +1,7 @@
-git+https://github.com/sugarush/sugar-document@master#egg=sugar-document
-git+https://github.com/sugarush/sugar-asynctest@master#egg=sugar-asynctest
-git+https://github.com/sugarush/sugar-odm@master#egg=sugar-odm
-git+https://github.com/sugarush/sugar-api@master#egg=sugar-api
+git+https://github.com/sugarush/fire-document@master#egg=fire-document
+git+https://github.com/sugarush/fire-asynctest@master#egg=fire-asynctest
+git+https://github.com/sugarush/fire-odm@master#egg=fire-odm
+git+https://github.com/sugarush/fire-api@master#egg=fire-api
 
 ipython
 pyjwt

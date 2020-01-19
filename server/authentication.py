@@ -1,7 +1,7 @@
 import hashlib
 from datetime import datetime, timedelta
 
-from sugar_api import WebToken
+from fire_api import WebToken
 
 from models.user import User
 
