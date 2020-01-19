@@ -7,3 +7,4 @@ ipython
 pyjwt
 sanic
 aioredis
+aiohttp

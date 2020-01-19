@@ -1,10 +1,15 @@
 import hashlib
+from uuid import uuid4
+from datetime import datetime
 
+import aiohttp
+
+from fire_document import Document
 from fire_odm import MongoDBModel, Field
-from fire_api import JSONAPIMixin
+from fire_api import JSONAPIMixin, TimestampMixin
 
 
-class User(MongoDBModel, JSONAPIMixin):
+class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
 
     __rate__ = ( 1, 'secondly' )
 
@@ -16,13 +21,21 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     __get__ = {
-        'groups': ['self', 'administrator']
+        'username': ['self'],
+        'password': [ ],
+        'groups': ['self', 'administrator'],
+        'email': ['self', 'administrator'],
+        'secret': [ ],
+        'key': ['self'],
     }
 
     __set__ = {
         'username': ['self', 'administrator', 'unauthorized'],
-        'password': ['self', 'administrator', 'unauthorized'],
-        'groups': ['administrator']
+        'password': ['self', 'unauthorized'],
+        'email': ['self', 'administrator', 'unauthorized'],
+        'groups': ['administrator'],
+        'secret': [ ],
+        'key': ['self'],
     }
 
     __database__ = {
@@ -30,23 +43,67 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     username = Field(required=True)
-    password = Field(required=True, computed='encrypt_password')
+    password = Field(required=True, validated='validate_password', computed='encrypt_password', validated_before_computed=True)
+    email = Field(required=True)
 
-    groups = Field(type=list, computed='default_groups', computed_empty=True)
+    secret = Field()
+    key = Field(validated='confirm_key')
 
-    def on_render(self, data, token):
-        del data['attributes']['password']
+    groups = Field(type=list, computed=lambda: [ 'users' ], computed_empty=True)
+
+    created = Field(type='timestamp', computed=lambda: datetime.now(), computed_empty=True, computed_type=True)
+
+    async def send_confirmation_email(self):
+
+        async with aiohttp.ClientSession() as session:
+
+            url = 'https://api.mailgun.net/v3/sandbox5526d86645c94173bd83f352839f2dd7.mailgun.org/messages'
+
+            data = {
+                'from': 'Fire Server <fire@server.com>',
+                'to': [ self.email ],
+                'subject': 'Account Confirmation',
+                'text': f'{hashlib.sha256(self.secret.encode()).hexdigest()}'
+            }
+
+            auth = aiohttp.BasicAuth('api', 'e63545b4104f6d7f63eea49020752799-0a4b0c40-c540a6c1')
+
+            async with session.request('POST', url, auth=auth, data=data) as response:
+                json = Document(await response.json())
+                if json.message == '\'to\' parameter is not a valid address. please check documentation':
+                    raise Exception('Invalid email address.')
+                elif not json.message == 'Queued. Thank you.':
+                    raise Exception(f'Failed to send confirmation email: {json.message}')
 
     async def on_create(self, token):
+
         if await self.find_one({ 'username': self.username }):
             raise Exception(f'Username {self.username} already exists.')
 
-    async def on_update(self, token, attributes):
-        if await self.find_one({ 'username': attributes['username'] }):
-            raise Exception(f'Username {attributes["username"]} already exists.')
+        if await self.find_one({ 'email': self.email }):
+            raise Exception(f'Email {self.email} already taken.')
 
-    def default_groups(self):
-        return [ 'users' ]
+        self.secret = str(uuid4())
+        await self.send_confirmation_email()
+
+    async def on_update(self, token, attributes):
+
+        username = attributes.get('username')
+        if username and await self.find_one({ 'username': username }):
+            raise Exception(f'Username {username} already exists.')
+
+        email = attributes.get('email')
+        if email and await self.find_one({ 'email': email }):
+            raise Exception(f'Email {email} already taken.')
+
+        try:
+            self.confirm_key(attributes.get('key'))
+        except:
+            await self.send_confirmation_email()
+
+    def validate_password(self, password):
+        if len(self.password) < 8:
+            raise Exception('Password length must be at least 8 characters.')
 
     def encrypt_password(self):
         if self.password == 'hashed-':
@@ -56,3 +113,8 @@ class User(MongoDBModel, JSONAPIMixin):
             return self.password
 
         return f'hashed-{hashlib.sha256(self.password.encode()).hexdigest()}'
+
+    def confirm_key(self, key):
+        if not key == 'None' and key and not \
+            (key == hashlib.sha256(self.secret.encode()).hexdigest()):
+                raise Exception('Invalid key.')

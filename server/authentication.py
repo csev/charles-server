@@ -34,7 +34,7 @@ class Authentication(WebToken):
             raise Exception('Invalid username or password.')
 
         return {
-            'exp': datetime.utcnow() + timedelta(minutes=5),
+            #'exp': datetime.utcnow() + timedelta(minutes=5),
             'nbf': datetime.utcnow(),
             'iat': datetime.utcnow(),
             'data': {

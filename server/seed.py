@@ -1,3 +1,6 @@
+import os
+from uuid import uuid4
+
 from fire_odm import MongoDB
 
 from server import server
@@ -10,8 +13,11 @@ async def before_server_start(app, loop):
     user = await User.find_one({ 'username': 'admin' })
 
     if not user:
-        await User.add({
-            'username': 'admin',
-            'password': 'admin',
+        user = await User.add({
+            'username': os.getenv('FIRE_ADMIN_USERNAME', 'administrator'),
+            'password': os.getenv('FIRE_ADMIN_PASSWORD', 'password'),
+            'email': os.getenv('FIRE_ADMIN_EMAIL', 'paul.severance@gmail.com'),
+            'secret': str(uuid4()),
             'groups': [ 'administrator' ]
         })
+        await user.send_confirmation_email()
