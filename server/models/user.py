@@ -1,3 +1,4 @@
+import os
 import hashlib
 from uuid import uuid4
 from datetime import datetime
@@ -57,16 +58,16 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
 
         async with aiohttp.ClientSession() as session:
 
-            url = 'https://api.mailgun.net/v3/sandbox5526d86645c94173bd83f352839f2dd7.mailgun.org/messages'
+            url = f'{os.getenv("FIRE_MAILGUN_URL")}/messages'
 
             data = {
-                'from': 'Fire Server <fire@server.com>',
+                'from': os.getenv('FIRE_MAILGUN_FORM', 'Fire Server <fire@server.com>'),
                 'to': [ self.email ],
                 'subject': 'Account Confirmation',
                 'text': f'{hashlib.sha256(self.secret.encode()).hexdigest()}'
             }
 
-            auth = aiohttp.BasicAuth('api', 'e63545b4104f6d7f63eea49020752799-0a4b0c40-c540a6c1')
+            auth = aiohttp.BasicAuth('api', os.getenv('FIRE_MAILGUN_API_KEY'))
 
             async with session.request('POST', url, auth=auth, data=data) as response:
                 json = Document(await response.json())
