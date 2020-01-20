@@ -12,11 +12,11 @@ from fire_api import JSONAPIMixin, TimestampMixin
 
 class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
 
-    __rate__ = ( 1, 'secondly' )
+    __rate__ = ( 10, 'secondly' )
 
     __acl__ = {
         'self': ['read', 'update', 'delete'],
-        'administrator': ['all'],
+        'administrator': ['read_all', 'read', 'update'],
         'other': ['read'],
         'unauthorized': ['create']
     }
@@ -24,7 +24,7 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
     __get__ = {
         'username': ['self'],
         'password': [ ],
-        'groups': ['self', 'administrator'],
+        'groups': ['administrator'],
         'email': ['self', 'administrator'],
         'secret': [ ],
         'key': ['self'],
@@ -61,10 +61,32 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
             url = f'{os.getenv("FIRE_MAILGUN_URL")}/messages'
 
             data = {
-                'from': os.getenv('FIRE_MAILGUN_FORM', 'Fire Server <fire@server.com>'),
+                'from': os.getenv('FIRE_MAILGUN_FROM', 'Fire Server <fire@server.com>'),
                 'to': [ self.email ],
                 'subject': 'Account Confirmation',
                 'text': f'{hashlib.sha256(self.secret.encode()).hexdigest()}'
+            }
+
+            auth = aiohttp.BasicAuth('api', os.getenv('FIRE_MAILGUN_API_KEY'))
+
+            async with session.request('POST', url, auth=auth, data=data) as response:
+                json = Document(await response.json())
+                if json.message == '\'to\' parameter is not a valid address. please check documentation':
+                    raise Exception('Invalid email address.')
+                elif not json.message == 'Queued. Thank you.':
+                    raise Exception(f'Failed to send confirmation email: {json.message}')
+
+    async def send_authorization_attempt_email(self):
+
+        async with aiohttp.ClientSession() as session:
+
+            url = f'{os.getenv("FIRE_MAILGUN_URL")}/messages'
+
+            data = {
+                'from': os.getenv('FIRE_MAILGUN_FROM', 'Fire Server <fire@server.com>'),
+                'to': [ self.email ],
+                'subject': 'Account Confirmation',
+                'text': f'A key authorization attempt has failed.'
             }
 
             auth = aiohttp.BasicAuth('api', os.getenv('FIRE_MAILGUN_API_KEY'))
@@ -85,22 +107,24 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
             raise Exception(f'Email {self.email} already taken.')
 
         self.secret = str(uuid4())
-        await self.send_confirmation_email()
+        #await self.send_confirmation_email()
 
     async def on_update(self, token, attributes):
 
         username = attributes.get('username')
-        if username and await self.find_one({ 'username': username }):
+        user = await self.find_one({ 'username': username })
+        if username and user and not (user.id == self.id):
             raise Exception(f'Username {username} already exists.')
 
         email = attributes.get('email')
-        if email and await self.find_one({ 'email': email }):
-            raise Exception(f'Email {email} already taken.')
-
-        try:
-            self.confirm_key(attributes.get('key'))
-        except:
-            await self.send_confirmation_email()
+        user = await self.find_one({ 'email': email })
+        if email:
+            if user and not (user.id == self.id):
+                raise Exception(f'Email {email} already taken.')
+            elif not (email == self.email):
+                self.key = None
+                self.secret = str(uuid4())
+                #await self.send_confirmation_email()
 
     def validate_password(self, password):
         if len(self.password) < 8:
