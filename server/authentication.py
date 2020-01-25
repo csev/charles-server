@@ -13,43 +13,10 @@ class Authentication(WebToken):
 
     @classmethod
     async def create(cls, attributes):
-        key = attributes.get('key')
-
-        if key:
-
-            user = await User.find_one({
-                'key': key
-            })
-
-            if not user:
-                raise Exception('Invalid key.')
-
-            return {
-                #'exp': datetime.utcnow() + timedelta(minutes=5),
-                'nbf': datetime.utcnow(),
-                'iat': datetime.utcnow(),
-                'data': {
-                    'id': user.id,
-                    'groups': user.groups,
-                    'scope': {
-                        'update-username': user.id,
-                        'update-password': user.id
-                    },
-                    'attributes': {
-                        'username': user.username
-                    }
-                }
-            }
-
         username = attributes.get('username')
 
         if not username:
             raise Exception('No username provided.')
-
-        email = attributes.get('email')
-
-        if not email:
-            raise Exception('No email provided.')
 
         password = attributes.get('password')
 
@@ -60,15 +27,14 @@ class Authentication(WebToken):
 
         user = await User.find_one({
             'username': username,
-            'email': email,
             'password': digest
         })
 
         if not user:
-            raise Exception('Invalid username, email or password.')
+            raise Exception('Invalid username and/or password.')
 
         return {
-            #'exp': datetime.utcnow() + timedelta(minutes=5),
+            'exp': datetime.utcnow() + timedelta(minutes=5),
             'nbf': datetime.utcnow(),
             'iat': datetime.utcnow(),
             'data': {

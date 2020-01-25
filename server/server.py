@@ -1,4 +1,5 @@
 from sanic import Sanic
+
 from fire_api import CORS, Redis
 from fire_odm import MongoDB
 
