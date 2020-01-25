@@ -12,11 +12,11 @@ logging.config.dictConfig({
     'formatters': {
         'generic': {
             'class': 'logging.Formatter',
-            'format': '%(asctime)s [%(process)d] [%(levelname)s] %(message)s'
+            'format': '%(asctime)s [%(levelname)s] %(message)s'
         },
         'access': {
             'class': 'logging.Formatter',
-            'format': '%(asctime)s - (%(name)s)[%(levelname)s][%(host)s]: %(request)s %(message)s %(status)d %(byte)d'
+            'format': '%(asctime)s [%(levelname)s] [%(host)s]: %(request)s %(message)s %(status)d %(byte)d'
         }
     },
     'handlers': {
