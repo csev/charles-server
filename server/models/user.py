@@ -16,13 +16,13 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
 
     __acl__ = {
         'self': ['read', 'update', 'delete'],
-        'administrator': ['read_all', 'read', 'update'],
+        'administrator': ['all'],
         'other': ['read'],
         'unauthorized': ['create']
     }
 
     __get__ = {
-        'username': ['self'],
+        'username': ['self', 'administrator'],
         'password': [ ],
         'groups': ['administrator'],
         'email': ['self', 'administrator'],
@@ -32,7 +32,7 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
 
     __set__ = {
         'username': ['self', 'administrator', 'unauthorized'],
-        'password': ['self', 'unauthorized'],
+        'password': ['self', 'administrator', 'unauthorized'],
         'email': ['self', 'administrator', 'unauthorized'],
         'groups': ['administrator'],
         'secret': [ ],
@@ -107,7 +107,7 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
             raise Exception(f'Email {self.email} already taken.')
 
         self.secret = str(uuid4())
-        #await self.send_confirmation_email()
+        await self.send_confirmation_email()
 
     async def on_update(self, token, attributes):
 
@@ -124,7 +124,12 @@ class User(MongoDBModel, JSONAPIMixin, TimestampMixin):
             elif not (email == self.email):
                 self.key = None
                 self.secret = str(uuid4())
-                #await self.send_confirmation_email()
+                await self.send_confirmation_email()
+
+        key = attributes.get('key')
+        if key == '$action-resend':
+            attributes['key'] = self.key
+            await self.send_confirmation_email()
 
     def validate_password(self, password):
         if len(self.password) < 8:
