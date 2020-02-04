@@ -1,8 +1,8 @@
 import os, sys
 import logging
 
-source_id = os.getenv('FIRE_TIMBER_SOURCE_ID')
-api_key = os.getenv('FIRE_TIMBER_API_KEY')
+source_id = os.getenv('CHARLES_TIMBER_SOURCE_ID')
+api_key = os.getenv('CHARLES_TIMBER_API_KEY')
 
 config = {
     'version': 1,
