@@ -2,7 +2,6 @@ import argparse
 
 import handlers
 import resource
-import seed
 import log
 
 from server import server
