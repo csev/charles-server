@@ -1,4 +1,4 @@
-from fire_elasticsearch import Elasticsearch
+from charles_elasticsearch import Elasticsearch
 
 from server import server
 
