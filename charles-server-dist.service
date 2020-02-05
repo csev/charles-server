@@ -1,0 +1,19 @@
+[Unit]
+Description=Elasticsearch Proxy
+
+[Service]
+# Do not include host scheme.
+# Environment=CHARLES_POSTGRES_HOST=us-west-2-postgres-test.cnk4nhblavpb.us-west-2.rds.amazonaws.com
+Environment=CHARLES_POSTGRES_HOST=
+Environment=CHARLES_POSTGRES_PORT=5432
+Environment=CHARLES_POSTGRES_USER=postgres
+Environment=CHARLES_POSTGRES_PASSWORD=
+# Include the scheme.
+# Environment=CHARLES_ELASTICSEARCH_URI=https://vpc-us-west-2-elasticsearch-test-n5tf33nrpf46gnfkghcnlsvn6m.us-west-2.es.amazonaws.com
+Environment=CHARLES_ELASTICSEARCH_URI=
+Environment=CHARLES_BASICAUTH_SECRET=
+
+User=<owner of git repo>
+Group=<group of git repo>
+
+ExecStart=/usr/bin/python3 <path to git repo>/server
