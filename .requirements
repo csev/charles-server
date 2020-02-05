@@ -3,7 +3,7 @@ git+https://github.com/sugarush/fire-router@master#egg=fire-router
 git+https://github.com/sugarush/fire-asynctest@master#egg=fire-asynctest
 git+https://github.com/sugarush/fire-odm@master#egg=fire-odm
 git+https://github.com/sugarush/fire-api@master#egg=fire-api
-git+https://github.com/sugarush/fire-elasticsearch@master#egg=fire-elasticsearch
+git+https://github.com/sugarush/charles-elasticsearch@master#egg=charles-elasticsearch
 
 ipython
 pyjwt
