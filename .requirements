@@ -1,13 +1,2 @@
-git+https://github.com/sugarush/fire-document@master#egg=fire-document
-git+https://github.com/sugarush/fire-router@master#egg=fire-router
-git+https://github.com/sugarush/fire-asynctest@master#egg=fire-asynctest
-git+https://github.com/sugarush/fire-odm@master#egg=fire-odm
-git+https://github.com/sugarush/fire-api@master#egg=fire-api
-git+https://github.com/sugarush/charles-elasticsearch@master#egg=charles-elasticsearch
-
-ipython
-pyjwt
-sanic
-aioredis
-aiohttp
-basicauth
+git+https://github.com/sugarush/fire-api@master
+git+https://github.com/sugarush/charles-elasticsearch@master
