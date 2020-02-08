@@ -7,7 +7,7 @@ import log
 from server import server
 
 
-parser = argparse.ArgumentParser(description='Fire Server')
+parser = argparse.ArgumentParser(description='Charles Server')
 
 parser.add_argument('--workers', default=1)
 parser.add_argument('--host', default='0.0.0.0')

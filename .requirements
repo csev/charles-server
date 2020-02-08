@@ -1,2 +1,4 @@
-git+https://github.com/sugarush/fire-api@master
+git+https://github.com/sugarush/sugar-api@master
+git+https://github.com/sugarush/sugar-elasticsearch@master
+git+https://github.com/sugarush/charles-auth@master
 git+https://github.com/sugarush/charles-elasticsearch@master
