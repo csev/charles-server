@@ -17,3 +17,6 @@ User=<owner of git repo>
 Group=<group of git repo>
 
 ExecStart=/usr/bin/python3 <path to git repo>/server
+
+[Install]
+WantedBy=multi-user.target
