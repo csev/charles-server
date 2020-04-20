@@ -1,4 +1,4 @@
-git+https://github.com/sugarush/sugar-api@master
-git+https://github.com/sugarush/sugar-elasticsearch@master
-git+https://github.com/psev/charles-auth@master
-git+https://github.com/psev/charles-elasticsearch@master
+git+https://github.com/csev/sugar-api@master
+git+https://github.com/csev/sugar-elasticsearch@master
+git+https://github.com/csev/charles-auth@master
+git+https://github.com/csev/charles-elasticsearch@master
